@@ -16,6 +16,7 @@ var rollbar = new Rollbar({
 rollbar.log("Hello world!");
 
 app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
 app.use(cors());
 
 app.get("/api/robots", (req, res) => {
