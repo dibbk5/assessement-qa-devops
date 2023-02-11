@@ -4,14 +4,27 @@ const app = express();
 const { bots, playerRecord } = require("./data");
 const { shuffleArray } = require("./utils");
 
+// include and initialize the rollbar library with your access token
+var Rollbar = require("rollbar");
+var rollbar = new Rollbar({
+  accessToken: "ee486921445c4fc886485dda68b9f97a",
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
+// record a generic message and send it to Rollbar
+rollbar.log("Hello world!");
+
 app.use(express.json());
 app.use(cors());
 
 app.get("/api/robots", (req, res) => {
   try {
     res.status(200).send(bots);
+    rollbar.info("Robots sent successfully");
   } catch (error) {
     console.log("ERROR GETTING BOTS", error);
+    rollbar.error("ERROR GETTING BOTS");
     res.sendStatus(400);
   }
 });
@@ -22,8 +35,10 @@ app.get("/api/robots/five", (req, res) => {
     let choices = shuffled.slice(0, 5);
     let compDuo = shuffled.slice(6, 8);
     res.status(200).send({ choices, compDuo });
+    rollbar.info("5 random robots sent");
   } catch (error) {
     console.log("ERROR GETTING FIVE BOTS", error);
+    rollbar.error("ERROR GETTING FIVE BOTS");
     res.sendStatus(400);
   }
 });
