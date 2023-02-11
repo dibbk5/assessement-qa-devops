@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const app = express();
 const { bots, playerRecord } = require("./data");
 const { shuffleArray } = require("./utils");
@@ -17,7 +16,6 @@ rollbar.log("Hello world!");
 
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
-app.use(cors());
 
 app.get("/api/robots", (req, res) => {
   try {
